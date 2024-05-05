@@ -3,7 +3,13 @@
 
 #include "GlobalNamespace/BeatmapObjectSpawnMovementData.hpp"
 
+#include "UnityEngine/GameObject.hpp"
+
+#include "bsml/shared/BSML-Lite.hpp"
+#include "bsml/shared/BSML.hpp"
+
 using namespace GlobalNamespace;
+using namespace UnityEngine;
 
 static modloader::ModInfo modInfo{MOD_ID, VERSION, 0};
 // Stores the ID and version of our mod, and is sent to
@@ -29,6 +35,26 @@ MOD_EXTERN_FUNC void setup(CModInfo *info) noexcept {
   PaperLogger.info("Completed setup!");
 }
 
+UnityEngine::Transform *GetSubcontainer(UnityEngine::UI::VerticalLayoutGroup *vertical)
+{
+    auto horizontal = BSML::Lite::CreateHorizontalLayoutGroup(vertical);
+    horizontal->GetComponent<UnityEngine::UI::LayoutElement *>()->set_minHeight(8);
+    horizontal->set_childForceExpandHeight(true);
+    horizontal->set_childAlignment(UnityEngine::TextAnchor::MiddleCenter);
+    return horizontal->get_transform();
+}
+
+void GameplaySettings(GameObject *gameObject, bool firstActivation)
+{
+    if (firstActivation)
+    {
+        auto vertical = BSML::Lite::CreateVerticalLayoutGroup(gameObject->get_transform());
+
+        BSML::Lite::CreateSliderSetting(GetSubcontainer(vertical), "Jump Duration", 0.01, getModConfig().JumpDuration.GetValue(), 0.01, 1, [](float newValue)
+        { getModConfig().JumpDuration.SetValue(newValue); });
+    }
+}
+
 MAKE_HOOK_MATCH(BeatmapObjectSpawnMovementData_Init, &BeatmapObjectSpawnMovementData::Init, void,
                 BeatmapObjectSpawnMovementData *self, int32_t noteLinesCount, float_t startNoteJumpMovementSpeed, float_t startBpm,
                 __BeatmapObjectSpawnMovementData__NoteJumpValueType noteJumpValueType, float_t noteJumpValue,
@@ -45,4 +71,7 @@ MOD_EXTERN_FUNC void late_load() noexcept {
   PaperLogger.info("Installing hooks...");
   INSTALL_HOOK(PaperLogger, BeatmapObjectSpawnMovementData_Init);
   PaperLogger.info("Installed all hooks!");
+
+  BSML::Init();
+  BSML::Register::RegisterGameplaySetupTab("JD\"Fixer\"", GameplaySettings);
 }
