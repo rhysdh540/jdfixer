@@ -1,5 +1,5 @@
 #include "main.hpp"
-#include "config.hpp"
+#include "ModConfig.hpp"
 
 #include "GlobalNamespace/BeatmapObjectSpawnMovementData.hpp"
 
@@ -21,7 +21,7 @@ Configuration &getConfig() {
 MOD_EXTERN_FUNC void setup(CModInfo *info) noexcept {
   *info = modInfo.to_c();
 
-  getConfig().Load();
+  getModConfig().Init(modInfo);
 
   // File logging
   Paper::Logger::RegisterFileContextId(PaperLogger.tag);
@@ -34,7 +34,7 @@ MAKE_HOOK_MATCH(BeatmapObjectSpawnMovementData_Init, &BeatmapObjectSpawnMovement
                 __BeatmapObjectSpawnMovementData__NoteJumpValueType noteJumpValueType, float_t noteJumpValue,
                 IJumpOffsetYProvider* jumpOffsetYProvider, UnityEngine::Vector3 rightVec, UnityEngine::Vector3 forwardVec) {
     noteJumpValueType = BeatmapObjectSpawnMovementData::NoteJumpValueType::JumpDuration;
-    noteJumpValue = getConfig().JumpDuration.GetValue();
+    noteJumpValue = getModConfig().JumpDuration.GetValue();
     BeatmapObjectSpawnMovementData_Init(self, noteLinesCount, startNoteJumpMovementSpeed, startBpm, noteJumpValueType, noteJumpValue, jumpOffsetYProvider, rightVec, forwardVec);
 }
 

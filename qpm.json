@@ -43,11 +43,6 @@
   },
   "dependencies": [
     {
-      "id": "beatsaber-hook",
-      "versionRange": "^5.0.0",
-      "additionalData": {}
-    },
-    {
       "id": "scotland2",
       "versionRange": "^0.1.4",
       "additionalData": {
@@ -62,6 +57,11 @@
     {
       "id": "bs-cordl",
       "versionRange": "^3500.0.0",
+      "additionalData": {}
+    },
+    {
+      "id": "config-utils",
+      "versionRange": "^1.4.2",
       "additionalData": {}
     },
     {

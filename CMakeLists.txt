@@ -58,7 +58,6 @@ add_library(
         SHARED
         ${cpp_file_list}
         ${c_file_list}
-        include/config.hpp
 )
 
 # for inline hook
