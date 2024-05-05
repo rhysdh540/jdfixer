@@ -115,6 +115,6 @@ jobs:
         files: |
           ./build/${{ steps.libname.outputs.NAME }}
           ./build/debug_${{ steps.libname.outputs.NAME }}
-          ./${{ env.qmod_name }}.qmod
+          ./build/${{ env.qmod_name }}.qmod
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
