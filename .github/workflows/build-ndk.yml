@@ -100,7 +100,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{env.qmod_name}}.qmod
-        path: ./${{ env.qmod_name }}.qmod
+        path: ./build/${{ env.qmod_name }}.qmod
         if-no-files-found: error
 
     # if we had a tag, we should make a release
